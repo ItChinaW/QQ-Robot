@@ -1,0 +1,20 @@
+{
+  "name": "jqr",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.10",
+    "marked": "^4.0.15",
+    "mongodb": "^4.0.1",
+    "node-fetch": "^2.6.1",
+    "oicq": "^1.18.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC"
+}

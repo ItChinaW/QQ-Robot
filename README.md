@@ -1,2 +1,2 @@
-# QQ-
-基于Nodejs下Ociq框架
+# QQ机器人
+基于Nodejs下Oicq框架
