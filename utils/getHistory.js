@@ -6,7 +6,7 @@ exports.getHistoryDay = async function (groupId) {
     var date = new Date();
     const response = await fetch(`http://v.juhe.cn/todayOnhistory/queryEvent.php?date=${date.getMonth() + 1}/${date.getDate()}&key=7172dbe8520b4e680fb61392b4e282a5`)
     const data = await response.json();
-    let result = data.result.shuffle() // 打乱数组
+    const result = data.result.shuffle() // 打乱数组
     bot.sendGroupMsg(groupId, [
         segment.text(`历史上的今天：
 

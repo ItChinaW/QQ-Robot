@@ -5,7 +5,7 @@ require("../utils/rand")
 
 // 监听关键词回复
 exports.reply = async function (data) {
-    let getData = require("../server/keyword").getKeyword()
+    const getData = require("../server/keyword").getKeyword()
     // 获取异步数据，异步数据只能异步函数中获取
     let arr = await getData
     let arrImg = await getImg

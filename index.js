@@ -1,6 +1,6 @@
-let config = require("./config.json");
-let { loginSlider, loginDevice, loginQrcode } = require("./events/login");
-let events = require("./events/index");
+const config = require("./config.json");
+const { loginSlider, loginDevice, loginQrcode } = require("./events/login");
+const events = require("./events/index");
 const { bot } = require("./events/global");
 
 // 随机函数
