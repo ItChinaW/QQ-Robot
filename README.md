@@ -10,4 +10,4 @@
     "mongo": "mongodb://数据库名用户:数据库密码@host:27017/数据库"
 }
  -->
-创建config.json 文件，然后负责这段代码
+创建config.json 文件，然后复制这段代码
