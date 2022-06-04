@@ -25,7 +25,7 @@ const getTechWeeklyLatest = () => {
 }
 const getTechWeekly = (id) => {
     https.get(`https://juejin.cn/post/${id}`, (res) => {
-        let html = ``, articleCotent = `技术资讯\n`
+        let html = ``, articleContent = `技术资讯\n`
         res.on('data', (chunk) => {
             html += chunk
         })
@@ -40,10 +40,10 @@ const getTechWeekly = (id) => {
             hrefs.forEach((item) => {
                 const title = $(item).text()
                 const href = JSON.parse(`"${decodeURI($(item).attr("href"))}"`);
-                articleCotent += `${title}\n${href}\n`
+                articleContent += `${title}\n${href}\n`
             })
             bot.gl.forEach((info, groupId, map) => {
-                bot.sendGroupMsg(groupId, articleCotent)
+                bot.sendGroupMsg(groupId, articleContent)
             })
         })
     })

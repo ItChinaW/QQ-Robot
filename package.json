@@ -5,15 +5,19 @@
   "main": "index.js",
   "dependencies": {
     "cheerio": "^1.0.0-rc.10",
+    "lodash": "^4.17.21",
     "marked": "^4.0.15",
+    "moment": "^2.29.3",
     "mongodb": "^4.0.1",
     "node-fetch": "^2.6.1",
-    "oicq": "^1.18.3"
+    "nodemon": "^2.0.16",
+    "oicq": "^1.18.3",
+    "rxjs": "^7.5.5"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "start": "node index.js"
+    "start": "nodemon index.js"
   },
   "author": "",
   "license": "ISC"

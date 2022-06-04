@@ -17,6 +17,7 @@ exports.getSxpd = async function (groupId, order) {
             `),
             segment.text(`${data.result.data}`)
         ]);
+        return false
     }
-    return false
+    return true
 }

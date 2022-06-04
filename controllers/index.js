@@ -14,7 +14,7 @@ exports.reply = async function (data) {
         bot.sendGroupMsg(data.group_id, "配对命令：xx配对 xx（男）和xx（女），例如：星座配对 白羊和狮子");
         return
     }
-    else if (/爆照/.test(data.keyword)) {
+    if (/爆照/.test(data.keyword)) {
         setTimeout(async () => {
             if (arrImg.length == 0) {
                 getImg = require("../server/keyword").getImg()
@@ -26,7 +26,7 @@ exports.reply = async function (data) {
         }, 1500)
         return
     }
-    else if (/语种大全/g.test(data.keyword)) {
+    if (/语种大全/g.test(data.keyword)) {
         bot.sendGroupMsg(data.group_id, reply("https://c2cpicdw.qpic.cn/offpic_new/13245505//13245505-219571708-05457C2A7089B084E94E29A74EBEA9C9/0?term=3"));
         return
     }

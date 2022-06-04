@@ -22,6 +22,7 @@ exports.getWeather = async function (groupId, order) {
             `),
             segment.text(`${result[4].date + result[4].weather} 气温${result[4].temperature} ${result[4].direct}`)
         ]);
+        return false
     }
-    return false
+    return true
 }

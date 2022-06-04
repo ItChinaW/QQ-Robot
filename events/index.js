@@ -1,6 +1,6 @@
 const { bot } = require("./global.js");
 const { message } = require("../common/data")
-const { changeNickName, setGender, setSignature, setKeyword, setGroupKick, setGroupLeave } = require("../controllers/order")
+const { changeNickName, setGender, setSignature, setKeyword, setGroupKick, setGroupLeave, clockEntity } = require("../controllers/order")
 const { reply } = require("../controllers/index")
 const { getHistoryDay } = require("../utils/getHistory")
 const { getWeather } = require("../utils/getWeather")
@@ -37,28 +37,38 @@ module.exports = function () {
     });
 
     // 监听群聊
-    bot.on("message.group", (data) => {
+    bot.on("message.group", async (data) => {
         let order = data.raw_message;
         if (data.user_id == config.owner) {
-            setGroupKick({ orderName: order, groupId: data.group_id }) || setGroupLeave({ orderName: order }) ||
+            if (setGroupKick({ orderName: order, groupId: data.group_id }) || setGroupLeave({ orderName: order }) ||
                 setGender({ orderName: order }) ||
                 setSignature({ orderName: order }) ||
-                changeNickName({ orderName: order })
+                changeNickName({ orderName: order })) {
+                return
+            }
         }
         if (data.atme) {
             order = data.message[1].data.text
             getKnowleage(data.group_id, order, data.user_id)
             return
         }
-        (order == "历史上的今天" && getHistoryDay(data.group_id)) ||
-            ((order == "来个笑话" || order == "讲个笑话") && getJoke(data.group_id)) ||
-            reply({ keyword: data.raw_message, group_id: data.group_id });
-        getWeather(data.group_id, order);  // 天气
-        getSxpd(data.group_id, order);    // 生肖配对
-        getXzpd(data.group_id, order);     // 星座配对
-        getXzys(data.group_id, order);     // 星座运势
-        getCyjl(data.group_id, order);     // 成语接龙
-        getTranslate(data.group_id, order) // 翻译
+        if (
+            // 历史上的今天
+            (await getHistoryDay(data)) ||
+            // 笑话
+            await getJoke(data) ||
+            // 监听批量关键词
+            await reply({ keyword: data.raw_message, group_id: data.group_id }) ||
+            // 打卡
+            await clockEntity(data)) {
+            return
+        }
+        if (!(await getWeather(data.group_id, order))) return  // 天气
+        if (!(await getSxpd(data.group_id, order))) return // 生肖配对
+        if (!(await getXzpd(data.group_id, order))) return // 星座配对
+        if (!(await getXzys(data.group_id, order))) return // 星座运势
+        if (!(await getCyjl(data.group_id, order))) return // 成语接龙
+        if (!(await getTranslate(data.group_id, order))) return //  翻译
     });
 
     //监听群员入群事件

@@ -24,21 +24,21 @@ exports.setGender = function (data) {
 }
 
 // 添加关键词和内容
-exports.setKeyword = function (data) {
+exports.setKeyword = async function (data) {
     let order = data.orderName;
-    if (order == 'add' && data.userId == owner) {
+    if (order == 'add' && data.userId == config.owner) {
         bot.sendPrivateMsg(data.userId, "请输入添加的关键词和回复内容：")
-        await bot.once("message.private", (data) => {
+        bot.once("message.private", (data) => {
             let order = data.raw_message;
             let position = order.indexOf(" ");
-            let keyword = order.slice(0, position)
-            let content = order.slice(position + 1, order.length)
+            let keyword = order.slice(0, position);
+            let content = order.slice(position + 1, order.length);
             // 将关键词和内容传送到数据库中
             try {
-                context(keyword, content)
-                bot.sendPrivateMsg(data.user_id, "添加成功")
+                context(keyword, content);
+                bot.sendPrivateMsg(data.user_id, "添加成功");
             } catch (error) {
-                console.log(error)
+                console.log(error);
             }
         });
     }
@@ -89,4 +89,10 @@ exports.setGroupLeave = function (data) {
         bot.sendPrivateMsg(config.owner, `已经退出群聊：${groupId}`)
         return false
     }
+}
+
+// 打卡功能
+exports.clockEntity = async function (data) {
+    if (!(/(打卡)/.test(data.raw_message))) return
+    console.log("success");
 }
