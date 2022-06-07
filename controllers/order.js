@@ -1,6 +1,8 @@
 const { bot } = require("../events/global");
 const { context, delKeyword, addImg } = require("../server/keyword")
-const config = require("../config.json")
+const { IsClocked, ToClock, ToJoinClock } = require("../server/clock")
+const config = require("../config.json");
+const { isEmpty } = require("lodash");
 
 // 改变QQ名称
 exports.changeNickName = function (data) {
@@ -94,5 +96,19 @@ exports.setGroupLeave = function (data) {
 // 打卡功能
 exports.clockEntity = async function (data) {
     if (!(/(打卡)/.test(data.raw_message))) return
-    console.log("success");
+    // 是否参加打卡
+    const result = await IsClocked(data.user_id)
+    // 如果没参加
+    if (isEmpty(result)) {
+        await ToJoinClock(data.user_id)
+        bot.sendGroupMsg(data.group_id, "欢迎参加打卡比赛，打卡第1天，加油！！！");
+        return
+    }
+    // ...
+    const count = await ToClock(data.user_id)
+    if (count === 0) {
+        bot.sendGroupMsg(data.group_id, "今天已经打过卡啦");
+        return
+    }
+    bot.sendGroupMsg(data.group_id, `打卡第${count}天，加油！！！`);
 }

@@ -1,6 +1,7 @@
 const https = require("https")
 const cheerio = require("cheerio")
 const { marked } = require("marked")
+const moment = require("moment");
 const { bot } = require("../events/global");
 
 const articles = new Map()
@@ -50,3 +51,17 @@ const getTechWeekly = (id) => {
 }
 
 setInterval(() => getTechWeeklyLatest(), 1000 * 60 * 60 * 24)
+setInterval(() => {
+    if (moment().format("HH:mm:ss") === "08:00:00") {
+        bot.gl.forEach((info, groupId, map) => {
+            bot.sendGroupMsg(groupId, "早上好，美好的一天开始了，今天记得打卡哦")
+        })
+        return
+    }
+    if (moment().format("HH:mm:ss") === "00:00:00" && moment().weekday() === 1) {
+        bot.gl.forEach((info, groupId, map) => {
+            bot.sendGroupMsg(groupId, "本周打卡排行榜：")
+        })
+        return
+    }
+}, 1000)
