@@ -19,17 +19,18 @@ exports.IsClocked = async function (user_id) {
 exports.ToClock = async function (user_id) {
     const col = await clockConn();
     const now = await col.findOne({ qq_id: user_id })
+    const time = moment().format("YYYY/MM/DD")
     // 限制今天重复打卡
-    if (now.clock_time === moment().format("YYYY/MM/DD")) {
+    if (now.clock_time === time) {
         return 0
     }
     // 超过一天没打卡，重置打卡
     if (now.clock_time !== moment().subtract(1, 'days').format("YYYY/MM/DD")) {
-        col.update({ qq_id: user_id }, { $set: { clock_count: 1 } })
+        col.update({ qq_id: user_id }, { $set: { clock_count: 1, clock_time: time } })
         return 1
     }
-    col.update({ qq_id: user_id }, { $set: { clock_count: now.clock_count++ } })
-    return now.clock_count++
+    col.update({ qq_id: user_id }, { $set: { clock_count: now.clock_count + 1, clock_time: time } })
+    return now.clock_count + 1
 }
 
 // 打卡排行榜
@@ -54,7 +55,7 @@ exports.ClockRank = async function () {
 // 破戒归零
 exports.CancelClock = async function (user_id) {
     const col = await clockConn();
-    col.updateOne({ qq_id: user_id }, { $set: { clock_count: 0 } })
+    col.updateOne({ qq_id: user_id }, { $set: { clock_count: 0, clock_time: moment().format("YYYY/MM/DD") } })
 }
 
 // 定时清零超过一天没打卡
