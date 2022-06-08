@@ -1,6 +1,6 @@
 const { bot } = require("./global.js");
 const { message } = require("../common/data")
-const { changeNickName, setGender, setSignature, setKeyword, setGroupKick, setGroupLeave, clockEntity } = require("../controllers/order")
+const { changeNickName, setGender, setSignature, setKeyword, setGroupKick, setGroupLeave, clockEntity, CancelClock } = require("../controllers/order")
 const { reply } = require("../controllers/index")
 const { getHistoryDay } = require("../utils/getHistory")
 const { getWeather } = require("../utils/getWeather")
@@ -52,17 +52,19 @@ module.exports = function () {
             getKnowleage(data.group_id, order, data.user_id)
             return
         }
-        if (
-            // 历史上的今天
+        if (// 历史上的今天
             (await getHistoryDay(data)) ||
             // 笑话
             await getJoke(data) ||
             // 监听批量关键词
             await reply({ keyword: data.raw_message, group_id: data.group_id }) ||
             // 打卡
-            await clockEntity(data)) {
-            return
-        }
+            await clockEntity(data) ||
+            // 取消打卡
+            await CancelClock(data) ||
+            // 查询排行榜
+            await SearchRank(data)
+        ) return
         if (!(await getWeather(data.group_id, order))) return  // 天气
         if (!(await getSxpd(data.group_id, order))) return // 生肖配对
         if (!(await getXzpd(data.group_id, order))) return // 星座配对

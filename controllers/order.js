@@ -1,6 +1,6 @@
 const { bot } = require("../events/global");
 const { context, delKeyword, addImg } = require("../server/keyword")
-const { IsClocked, ToClock, ToJoinClock, CancelClock } = require("../server/clock")
+const { IsClocked, ToClock, ToJoinClock, CancelClock, ClockRank } = require("../server/clock")
 const config = require("../config.json");
 const { isEmpty } = require("lodash");
 
@@ -118,4 +118,10 @@ exports.CancelClock = async function (data) {
     if (!(/破戒/.test(data.raw_message))) return
     await CancelClock(data.user_id)
     bot.sendGroupMsg(data.group_id, `小撸怡情，大撸伤身。打卡天数已归零，请注意破戒次数`);
+}
+
+// 查询排行榜
+exports.SearchRank = async function (data) {
+    if (!(/打卡排名/.test(data.raw_message))) return
+    bot.sendGroupMsg(data.group_id, `本周打卡排行榜：\n${await ClockRank()}`)
 }
