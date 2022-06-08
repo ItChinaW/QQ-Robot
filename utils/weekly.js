@@ -3,6 +3,7 @@ const cheerio = require("cheerio")
 const { marked } = require("marked")
 const moment = require("moment");
 const { bot } = require("../events/global");
+const { ClockRank } = require("../server/clock")
 
 const articles = new Map()
 const ISSUES = "https://juejin.cn/user/3491704662669469/posts"
@@ -59,8 +60,8 @@ setInterval(() => {
         return
     }
     if (moment().format("HH:mm:ss") === "00:00:00" && moment().weekday() === 1) {
-        bot.gl.forEach((info, groupId, map) => {
-            bot.sendGroupMsg(groupId, "本周打卡排行榜：")
+        bot.gl.forEach(async (info, groupId, map) => {
+            bot.sendGroupMsg(groupId, `本周打卡排行榜：\n${await ClockRank()}`)
         })
         return
     }

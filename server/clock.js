@@ -1,10 +1,11 @@
 const moment = require("moment");
 const clockConn = require("../common/db").getCollection("clock");
+const { isEmpty } = require("lodash");
 
 // 参加打卡比赛
-exports.ToJoinClock = async function (user_id) {
+exports.ToJoinClock = async function (user_id, user_name) {
     const col = await clockConn();
-    col.insertOne({ qq_id: user_id, clock_time: moment().format("YYYY/MM/DD"), clock_count: 1 })
+    col.insertOne({ qq_id: user_id, clock_time: moment().format("YYYY/MM/DD"), clock_count: 1, clock_nickname: user_name })
 }
 
 // 查询是否打卡
@@ -29,4 +30,23 @@ exports.ToClock = async function (user_id) {
     }
     col.update({ qq_id: user_id }, { $set: { clock_count: now.clock_count++ } })
     return now.clock_count++
+}
+
+// 打卡排行榜
+exports.ClockRank = async function () {
+    const col = await clockConn();
+    const result = await col.find({ clock_count: { $gt: 0 } }).sort({ clock_count: 1 }).toArray()
+    if (isEmpty(result)) {
+        return "还没有人打卡过"
+    }
+    let str = ``
+    result.forEach((item, index) => {
+        if (index === result.length - 1) {
+            str += `第${index + 1}名，${item.clock_nickname}，累计打卡${item.clock_count}天`
+            return
+        }
+
+        str += `第${index + 1}名，${item.clock_nickname}，累计打卡${item.clock_count}天\n`
+    })
+    return str
 }

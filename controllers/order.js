@@ -100,7 +100,7 @@ exports.clockEntity = async function (data) {
     const result = await IsClocked(data.user_id)
     // 如果没参加
     if (isEmpty(result)) {
-        await ToJoinClock(data.user_id)
+        await ToJoinClock(data.user_id, data.sender.nickname)
         bot.sendGroupMsg(data.group_id, "欢迎参加打卡比赛，打卡第1天，加油！！！");
         return
     }
