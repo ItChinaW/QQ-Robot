@@ -4,7 +4,7 @@ const moment = require("moment");
 
 // 定时
 setInterval(async () => {
-    let time = moment().format("HH:mm:ss")
+    let time = moment().utcOffset(8).format("HH:mm:ss")
     if (time === "12:00:00") {
         hi = cqcode.record("./static/audio/M}4PW}QVADVOY@TSSN%9JF3.amr")
         return

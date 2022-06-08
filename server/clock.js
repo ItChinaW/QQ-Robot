@@ -5,7 +5,7 @@ const { isEmpty } = require("lodash");
 // 参加打卡比赛
 exports.ToJoinClock = async function (user_id, user_name) {
     const col = await clockConn();
-    col.insertOne({ qq_id: user_id, clock_time: moment().format("YYYY/MM/DD"), clock_count: 1, clock_nickname: user_name })
+    col.insertOne({ qq_id: user_id, clock_time: moment().utcOffset(8).format("YYYY/MM/DD"), clock_count: 1, clock_nickname: user_name })
 }
 
 // 查询是否打卡
@@ -19,13 +19,13 @@ exports.IsClocked = async function (user_id) {
 exports.ToClock = async function (user_id) {
     const col = await clockConn();
     const now = await col.findOne({ qq_id: user_id })
-    const time = moment().format("YYYY/MM/DD")
+    const time = moment().utcOffset(8).format("YYYY/MM/DD")
     // 限制今天重复打卡
     if (now.clock_time === time) {
         return 0
     }
     // 超过一天没打卡，重置打卡
-    if (now.clock_time !== moment().subtract(1, 'days').format("YYYY/MM/DD")) {
+    if (now.clock_time !== moment().utcOffset(8).subtract(1, 'days').format("YYYY/MM/DD")) {
         col.update({ qq_id: user_id }, { $set: { clock_count: 1, clock_time: time } })
         return 1
     }
@@ -55,7 +55,7 @@ exports.ClockRank = async function () {
 // 破戒归零
 exports.CancelClock = async function (user_id) {
     const col = await clockConn();
-    col.updateOne({ qq_id: user_id }, { $set: { clock_count: 0, clock_time: moment().format("YYYY/MM/DD") } })
+    col.updateOne({ qq_id: user_id }, { $set: { clock_count: 0, clock_time: moment().utcOffset(8).format("YYYY/MM/DD") } })
 }
 
 // 定时清零超过一天没打卡
@@ -64,7 +64,7 @@ exports.IntervalClearClock = async function () {
     const now = await col.find({}).toArray()
     now.forEach((item) => {
         // 超过一天没打卡，重置打卡
-        if (item.clock_time !== moment().subtract(1, 'days').format("YYYY/MM/DD")) {
+        if (item.clock_time !== moment().utcOffset(8).subtract(1, 'days').format("YYYY/MM/DD")) {
             CancelClock(item.user_id)
         }
     })

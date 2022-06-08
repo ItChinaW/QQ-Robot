@@ -53,18 +53,19 @@ const getTechWeekly = (id) => {
 
 setInterval(() => getTechWeeklyLatest(), 1000 * 60 * 60 * 24)
 setInterval(() => {
+    const time = moment().utcOffset(8).format("HH:mm:ss")
     // 重置未打卡的天数
-    if (moment().format("HH:mm:ss") === "00:00:00") {
+    if (time === "00:00:00") {
         IntervalClearClock()
         return
     }
-    if (moment().format("HH:mm:ss") === "08:00:00") {
+    if (time === "08:00:00") {
         bot.gl.forEach((info, groupId, map) => {
             bot.sendGroupMsg(groupId, "早上好，美好的一天开始了，今天记得打卡哦")
         })
         return
     }
-    if (moment().format("HH:mm:ss") === "00:00:00" && moment().weekday() === 1) {
+    if (time === "00:00:00" && moment().utcOffset(8).weekday() === 1) {
         bot.gl.forEach(async (info, groupId, map) => {
             bot.sendGroupMsg(groupId, `本周打卡排行榜：\n${await ClockRank()}`)
         })
