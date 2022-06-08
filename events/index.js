@@ -1,6 +1,6 @@
 const { bot } = require("./global.js");
 const { message } = require("../common/data")
-const { changeNickName, setGender, setSignature, setKeyword, setGroupKick, setGroupLeave, clockEntity, CancelClock } = require("../controllers/order")
+const { changeNickName, setGender, setSignature, setKeyword, setGroupKick, setGroupLeave, clockEntity, CancelClock, SearchRank } = require("../controllers/order")
 const { reply } = require("../controllers/index")
 const { getHistoryDay } = require("../utils/getHistory")
 const { getWeather } = require("../utils/getWeather")
