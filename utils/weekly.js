@@ -3,7 +3,7 @@ const cheerio = require("cheerio")
 const { marked } = require("marked")
 const moment = require("moment");
 const { bot } = require("../events/global");
-const { ClockRank } = require("../server/clock")
+const { ClockRank, IntervalClearClock } = require("../server/clock")
 
 const articles = new Map()
 const ISSUES = "https://juejin.cn/user/3491704662669469/posts"
@@ -53,6 +53,11 @@ const getTechWeekly = (id) => {
 
 setInterval(() => getTechWeeklyLatest(), 1000 * 60 * 60 * 24)
 setInterval(() => {
+    // 重置未打卡的天数
+    if (moment().format("HH:mm:ss") === "00:00:00") {
+        IntervalClearClock()
+        return
+    }
     if (moment().format("HH:mm:ss") === "08:00:00") {
         bot.gl.forEach((info, groupId, map) => {
             bot.sendGroupMsg(groupId, "早上好，美好的一天开始了，今天记得打卡哦")
@@ -65,4 +70,5 @@ setInterval(() => {
         })
         return
     }
+
 }, 1000)

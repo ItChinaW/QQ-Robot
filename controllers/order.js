@@ -1,6 +1,6 @@
 const { bot } = require("../events/global");
 const { context, delKeyword, addImg } = require("../server/keyword")
-const { IsClocked, ToClock, ToJoinClock } = require("../server/clock")
+const { IsClocked, ToClock, ToJoinClock, CancelClock } = require("../server/clock")
 const config = require("../config.json");
 const { isEmpty } = require("lodash");
 
@@ -95,7 +95,7 @@ exports.setGroupLeave = function (data) {
 
 // 打卡功能
 exports.clockEntity = async function (data) {
-    if (!(/(打卡)/.test(data.raw_message))) return
+    if (!(/打卡/.test(data.raw_message))) return
     // 是否参加打卡
     const result = await IsClocked(data.user_id)
     // 如果没参加
@@ -111,4 +111,11 @@ exports.clockEntity = async function (data) {
         return
     }
     bot.sendGroupMsg(data.group_id, `打卡第${count}天，加油！！！`);
+}
+
+// 用户主动取消打卡天数
+exports.CancelClock = async function (data) {
+    if (!(/破戒/.test(data.raw_message))) return
+    await CancelClock(data.user_id)
+    bot.sendGroupMsg(data.group_id, `小撸怡情，大撸伤身。打卡天数已归零，请注意破戒次数`);
 }

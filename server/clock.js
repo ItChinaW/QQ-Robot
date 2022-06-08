@@ -50,3 +50,22 @@ exports.ClockRank = async function () {
     })
     return str
 }
+
+// 破戒归零
+exports.CancelClock = async function (user_id) {
+    const col = await clockConn();
+    col.updateOne({ qq_id: user_id }, { $set: { clock_count: 0 } })
+}
+
+// 定时清零超过一天没打卡
+exports.IntervalClearClock = async function () {
+    const col = await clockConn();
+    const now = await col.find({}).toArray()
+    now.forEach((item) => {
+        // 超过一天没打卡，重置打卡
+        if (item.clock_time !== moment().subtract(1, 'days').format("YYYY/MM/DD")) {
+            CancelClock(item.user_id)
+        }
+    })
+
+}
