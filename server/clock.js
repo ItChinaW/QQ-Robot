@@ -35,7 +35,7 @@ exports.ToClock = async function (user_id) {
 // 打卡排行榜
 exports.ClockRank = async function () {
     const col = await clockConn();
-    const result = await col.find({ clock_count: { $gt: 0 } }).sort({ clock_count: 1 }).toArray()
+    const result = await col.find({ clock_count: { $gt: 0 } }).sort({ clock_count: -1 }).toArray()
     if (isEmpty(result)) {
         return "还没有人打卡过"
     }
