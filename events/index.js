@@ -49,7 +49,7 @@ module.exports = function () {
         }
         if (data.atme) {
             order = data.message[1].data.text
-            getKnowleage(data.group_id, order, data.user_id)
+            await getKnowleage(data.group_id, order, data.user_id)
             return
         }
         if (// 历史上的今天

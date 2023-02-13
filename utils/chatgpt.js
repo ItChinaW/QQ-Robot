@@ -15,7 +15,6 @@ exports.AskQuestion = async (question) => {
 
     let theAnswer;
     await completion.then(async (r) => {
-        console.log(r.data);
         theAnswer = await r.data.choices[0].text;
     });
     return theAnswer;
