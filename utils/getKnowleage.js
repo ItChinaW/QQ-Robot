@@ -13,9 +13,7 @@ const {AskQuestion} = require("./chatgpt");
 // }
 
 exports.getKnowleage = async function (group_id, order, user_id) {
-    await bot.sendGroupMsg(group_id, `
-        ${order}，正在为您查询，请稍等...
-    `)
+    await bot.sendGroupMsg(group_id, `${order}，正在为您查询，请稍等...`)
     const result = await AskQuestion(order)
     await bot.sendGroupMsg(group_id, result)
 }
