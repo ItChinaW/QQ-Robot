@@ -1,7 +1,7 @@
 const config = require("./config.json");
-const { loginSlider, loginDevice, loginQrcode } = require("./events/login");
+const {loginDevice} = require("./events/login");
 const events = require("./events/index");
-const { bot } = require("./events/global");
+const {bot} = require("./events/global");
 
 // 随机函数
 require("./utils/rand");
@@ -9,8 +9,8 @@ require("./utils/rand");
 // mongodb 数据库登录
 require("./common/db")
 
-// 滑块登录
-loginSlider();
+// 登录
+loginDevice();
 
 // 事件入口
 events();

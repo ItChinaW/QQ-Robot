@@ -12,6 +12,7 @@
     "node-fetch": "^2.6.1",
     "nodemon": "^2.0.16",
     "oicq": "^1.18.3",
+    "openai": "^3.1.0",
     "rxjs": "^7.5.5"
   },
   "scripts": {
