@@ -15,8 +15,8 @@
   }
 }
 ```
+创建config.json 文件，然后复制这段代码
+
 
 ## ChatGPT
 Apikey申请地址：https://beta.openai.com/account/api-keys
-
-创建config.json 文件，然后复制这段代码
